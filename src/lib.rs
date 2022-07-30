@@ -1,15 +1,34 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::near_bindgen;
+use near_sdk::{near_bindgen,env};
+
+const PUZZLE_NUMBER: u8 = 1;
 
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
 pub struct Contract {
     // SETUP CONTRACT STATE
+    solution: String
 }
 
 #[near_bindgen]
 impl Contract {
     // ADD CONTRACT METHODS HERE
+    pub fn get_puzzle_number(&self) -> u8 {
+        PUZZLE_NUMBER
+    }
+
+    pub fn set_guess(&mut self, solution: String){
+        self.solution = solution ;
+    }
+
+    pub fn guess_solution(&mut self, solution: String) {
+        if self.solution == solution{
+            env::log_str("Correct");
+        }
+        else {
+            env::log_str("Not Found");
+        }
+    }
 }
 
 /*
