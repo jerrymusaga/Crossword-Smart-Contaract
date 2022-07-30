@@ -1,7 +1,7 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::{near_bindgen,env};
 
-const PUZZLE_NUMBER: u8 = 1;
+// const PUZZLE_NUMBER: u8 = 1;
 
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
@@ -20,8 +20,12 @@ impl Contract {
         }
     }
 
-    pub fn get_puzzle_number(&self) -> u8 {
-        PUZZLE_NUMBER
+    // pub fn get_puzzle_number(&self) -> u8 {
+    //     PUZZLE_NUMBER
+    // }
+
+    pub fn get_solution(&self){
+        self.solution.clone();
     }
 
     pub fn set_guess(&mut self, solution: String){
@@ -29,7 +33,10 @@ impl Contract {
     }
 
     pub fn guess_solution(&mut self, solution: String) -> bool {
-        if self.solution == solution{
+        let hashed_input = env::sha256(solution.as_bytes());
+        let hashed_input_hex = hex::encode(&hashed_input);
+
+        if self.solution == hashed_input_hex{
             env::log_str("Correct");
             true
         }
